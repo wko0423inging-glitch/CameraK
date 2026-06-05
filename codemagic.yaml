@@ -3,21 +3,12 @@ workflows:
     name: iOS Build
     environment:
       xcode: latest
-      cocoapods: default
     triggering:
       events:
         - push
-      branches:
-        - main
+      branch:
+        patterns:
+          - pattern: main
     scripts:
-      - name: Build iOS
-        script: |
-          cd $CM_BUILD_DIR
-          xcodebuild -version
-    artifacts:
-      - build/**/*.ipa
-      - build/**/*.app
-    publishing:
-      email:
-        recipients:
-          - wko0423inging@icloud.com
+      - name: Build
+        script: xcodebuild -version
