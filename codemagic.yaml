@@ -1,14 +1,6 @@
 workflows:
   ios-workflow:
     name: iOS Build
-    environment:
-      xcode: latest
-    triggering:
-      events:
-        - push
-      branch:
-        patterns:
-          - pattern: main
     scripts:
       - name: Build
         script: xcodebuild -version
