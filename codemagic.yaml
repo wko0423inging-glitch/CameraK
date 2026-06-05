@@ -1,0 +1,40 @@
+workflows:
+  ios-workflow:
+    name: iOS Build
+    environment:
+      ios_signing:
+        distribution_type: ad_hoc
+        bundle_id: com.kodaiiwata.camerak
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch:
+        - main
+    scripts:
+      - name: Set up signing
+        script: |
+          echo "Setting up code signing"
+      - name: Build iOS
+        script: |
+          cd $CM_BUILD_DIR
+          xcodebuild build-for-testing \
+            -scheme CameraK \
+            -configuration Release \
+            -derivedDataPath build/DerivedData \
+            -workspace CameraK.xcworkspace || true
+      - name: Build archive
+        script: |
+          cd $CM_BUILD_DIR
+          xcodebuild archive \
+            -scheme CameraK \
+            -configuration Release \
+            -archivePath build/CameraK.xcarchive || true
+    artifacts:
+      - build/CameraK.xcarchive
+      - build/DerivedData
+    publishing:
+      slack:
+        channel: '#codemagic'
+        notify_on_build_start: true
